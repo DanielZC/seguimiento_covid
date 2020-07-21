@@ -92,7 +92,7 @@ Paso 1: Ejecutar el comando:
 composer install
 ```
 
-Paso 2: Crear archivo .env dentro de la carpeta del proyecto y copiar el contenido de .env.example a .env
+Paso 2: Crear archivo .env dentro de la carpeta del proyecto y copiar el contenido de .env.example al archivo .env creado previamente
 
 Paso 3: Ejecutar el comando:
 
