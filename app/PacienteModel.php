@@ -9,7 +9,7 @@ class PacienteModel extends Model
 {
     public function Listar()
     {
-       $pacientes = DB::table('pacientes')->get(); 
+       $pacientes = DB::table('pacientes')->get();
        return $pacientes;
     }
 }
