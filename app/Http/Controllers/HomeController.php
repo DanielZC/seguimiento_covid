@@ -10,7 +10,6 @@ class HomeController extends Controller
     public function Index()
     {
         $pacientes = new PacienteModel;
-
         return $pacientes->Listar();
     }
 }
