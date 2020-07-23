@@ -48,13 +48,15 @@ class ProgramacionTomaDeMuestraController extends Controller
         $programacionModel = new ProgramacionTomaDeMuestraModel;
         $result = $programacionModel->Buscar($request);
 
-        if($result != '!found')
+        $mjs = array('!found','exists');
+
+        if(!in_array($result['mensaje'],$mjs))
         {
-            return view('progTomaMuestra.Crear', ['infoPaciente' => $result]);
+            return view('progTomaMuestra.Crear', ['infoPaciente' => $result['paciente']]);
         }
         else
         {
-            return redirect()->route('programacion.crear')->with('Msj', $result);
+            return redirect()->route('programacion.crear')->with('Msj', $result['mensaje'])->with('paciente', $result['paciente']);
         }
 
     }
@@ -67,7 +69,23 @@ class ProgramacionTomaDeMuestraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'paciente_id' => 'required | numeric',
+            'acepta_visita' => 'required | string',
+            'fecha_programacion' => 'required | date',
+            'programacion_atencion' => 'required | string',
+            'nombre_programa' => 'required | string',
+        ]);
+
+        if($validator->fails())
+        {
+            return redirect()->route('programacion.crear')->withErrors('programacion',$validator)->withInput();
+        }
+        
+        $programacionModel = new ProgramacionTomaDeMuestraModel;
+        $result = $programacionModel->Crear($request);
+
+        return redirect()->route('programacion.crear')->with('Msj',$result);
     }
 
     /**
