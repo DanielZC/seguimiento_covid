@@ -66,7 +66,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            REPORTES
+                            LISTADO DE PACIENTES
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a href="{{route('paciente.index')}}" class="dropdown-item" href="#">Listar Todos los Pacientes</a>
@@ -96,7 +96,7 @@
 
         {{-- </div> --}}
 
-        <div class="container-fluid pt-4">
+        <div class="container-fluid pt-4 mb-5">
             @yield('contenido')
         </div>
     </body>
