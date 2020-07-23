@@ -24,3 +24,4 @@ Route::post('/Paciente','PacienteController@store')->name('paciente.guardar');
 // RUTAS WEB DE PROGRAMACION DE TOMA DE MUESTRAS
 Route::get('/Programacion-Toma-Muestra','ProgramacionTomaDeMuestraController@create')->name('programacion.crear');
 Route::post('/Buscar-Paciente', 'ProgramacionTomaDeMuestraController@search')->name('programacion.buscarPaciente');
+Route::post('/Programacion', 'ProgramacionTomaDeMuestraController@store')->name('programacion.guardar');
