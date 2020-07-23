@@ -13,4 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index');
+// RUTA WEB PARA EL INDEX
+Route::get('/', 'HomeController@index')->name('index');
+
+// RUTAS WEB DE PACIENTE
+Route::get('/Paciente-Listar', 'PacienteController@Index')->name('paciente.index');
+Route::get('/Paciente-Crear', 'PacienteController@create')->name('paciente.crear');
+Route::post('/Paciente','PacienteController@store')->name('paciente.guardar');
+
+// RUTAS WEB DE PROGRAMACION DE TOMA DE MUESTRAS
+Route::get('/Programacion-Toma-Muestra','ProgramacionTomaDeMuestraController@create')->name('programacion.crear');
+Route::post('/Buscar-Paciente', 'ProgramacionTomaDeMuestraController@search')->name('programacion.buscarPaciente');
