@@ -23,6 +23,8 @@ class PacienteModel extends Model
         {
             $sql = DB::table('pacientes')->insert([
                 'tipo_paciente' => $paciente->tipo_paciente,
+                'numero_documento' => $paciente->numero_documento,
+                'tipo_documento' => $paciente->tipo_documento,
                 'primer_nombre' => $paciente->primer_nombre,
                 'segundo_nombre' => $paciente->segundo_nombre,
                 'primer_apellido' => $paciente->primer_apellido,
@@ -30,15 +32,15 @@ class PacienteModel extends Model
                 'edad' => $paciente->edad,
                 'unidad_medida' => $paciente->unidad_medida,
                 'sexo' => $paciente->sexo,
-                'telefono' => $paciente->telefono,
-                'aseguradora' => $paciente->aseguradora,
-                'tipo_documento' => $paciente->tipo_documento,
+                'municipio' => $paciente->municipio,
                 'barrio' => $paciente->barrio,
-                'numero_documento' => $paciente->numero_documento,
+                'telefono' => $paciente->telefono,
+                'telefono2' => $paciente->telefono2,
                 'correo' => $paciente->correo,
-                'fecha_prog_recep' => $paciente->fecha_prog_recep,
-                'fecha_registro' => date('Y-m-d h:i:s'),
-                'municipio' => $paciente->municipio
+                'aseguradora' => $paciente->aseguradora,
+                'regimen' => 'SUBSIDIADO',
+                'fecha_programacion_recepcion' => $paciente->fecha_prog_recep .' '. date('h:i:s'),
+                'fecha_creacion_registro' => date('Y-m-d h:i:s')
             ]);
 
             if($sql)

@@ -19,6 +19,121 @@ class ProgramacionTomaDeMuestraController extends Controller
         //
     }
 
+    public function fechaRealizacion(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'numero_documento' => 'required | numeric'
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status' => 'error',
+                'error' => $validator->errors()
+            ]);
+        }
+
+        $programacionModel = new ProgramacionTomaDeMuestraModel;
+        $result = $programacionModel->BuscarPacienteFR($request);
+
+        $msj = array('!found','exists','bad','existFR');
+
+        if(!in_array($result['mensaje'],$msj))
+        {
+            return response()->json([
+                'status' => 'ok',
+                'data' => $result['data']
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status' => $result['mensaje'],
+                'data' => $result['data']
+            ]);
+        }
+    }
+
+    public function ingresarFechaRealizacion(Request $request)
+    {
+        if($request->visita_exitosa == 'No')
+        {
+            $validator = Validator::make($request->all(),[
+                'visita_exitosa' => 'required',
+                'fecha_realizacion' => 'required | date',
+                'motivo' => 'required',
+                'paciente_id' => 'required | numeric'
+            ]);
+
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status' => 'error',
+                    'error' => $validator->errors()
+                ]);
+            }
+            else
+            {
+                $programacionModel = new ProgramacionTomaDeMuestraModel;
+                $result = $programacionModel->IngresarFechaRealizacion($request);
+
+                if($result == 'ok')
+                {
+                    return response()->json([
+                        'status' => 'ok'
+                    ]);
+                }
+                else
+                {
+                    return response()->json([
+                        'status' => 'bad'
+                    ]);
+
+                }
+                
+            }            
+        }
+    
+        $validator = Validator::make($request->all(),[
+            'visita_exitosa' => 'required',
+            'fecha_realizacion' => 'required | date',
+            'tipo_prueba' => 'required',
+            'paciente_id' => 'required | numeric'
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status' => 'error',
+                'error' => $validator->errors()
+            ]);
+        }
+
+        $programacionModel = new ProgramacionTomaDeMuestraModel;
+        $result = $programacionModel->IngresarFechaRealizacion($request);
+
+        if($result)
+        {
+            return response()->json([
+                'status' => 'ok'
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status' => 'bad'
+            ]);
+        }
+    }
+
+    public function buscarPacienteIngresarResultado(Request $request)
+    {
+        return response()->json([
+            'status' => 'ok',
+            'data' => $request->all()
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,21 +157,30 @@ class ProgramacionTomaDeMuestraController extends Controller
 
         if ($validator->fails()) 
         {
-            return redirect()->route('programacion.crear')->withErrors($validator, 'info')->withInput();
+            return response()->json([
+                'status' => 'error',
+                'error' => $validator->errors()
+            ]);
         }
 
         $programacionModel = new ProgramacionTomaDeMuestraModel;
         $result = $programacionModel->Buscar($request);
 
-        $mjs = array('!found','exists');
+        $msj = array('!found','exists');
 
-        if(!in_array($result['mensaje'],$mjs))
+        if(in_array($result['mensaje'],$msj))
         {
-            return view('progTomaMuestra.Crear', ['infoPaciente' => $result['paciente']]);
+            return response()->json([
+                'status' => $result['mensaje'],
+                'data' => $result
+            ]);
         }
         else
         {
-            return redirect()->route('programacion.crear')->with('Msj', $result['mensaje'])->with('paciente', $result['paciente']);
+            return response()->json([
+                'status' => 'ok',
+                'data' => $result
+            ]);
         }
 
     }
@@ -69,23 +193,31 @@ class ProgramacionTomaDeMuestraController extends Controller
      */
     public function store(Request $request)
     {
+        
         $validator = Validator::make($request->all(),[
             'paciente_id' => 'required | numeric',
             'acepta_visita' => 'required | string',
             'fecha_programacion' => 'required | date',
-            'programacion_atencion' => 'required | string',
-            'nombre_programa' => 'required | string',
+            'lugar_toma' => 'required | string',
+            'nombre_programa' => 'required | string' 
         ]);
-
+  
+        
         if($validator->fails())
         {
-            return redirect()->route('programacion.crear')->withErrors('programacion',$validator)->withInput();
+            return response()->json([
+                'status' => 'error',
+                'error' => $validator->errors()
+            ]);
         }
-        
+
         $programacionModel = new ProgramacionTomaDeMuestraModel;
         $result = $programacionModel->Crear($request);
 
-        return redirect()->route('programacion.crear')->with('Msj',$result);
+        return response()->json([
+            'status' => 'ok',
+            'data' => ''
+        ]);
     }
 
     /**

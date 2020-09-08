@@ -6,36 +6,31 @@
                 <div class="card-body">
                     <h4>Programacion de pacientes para la toma de muestra</h4>
                     <hr>
-                    <form action="{{ route('programacion.buscarPaciente') }}" method="POST">
+                    <form method="POST">
                         <div class="form-group">
-                            @csrf
                             <label>Ingrese numero de identificacion</label>
-                            <input type="text" name="numero_documento" class="form-control">
-                            <small class="text-danger">{{ $errors->info->first('numero_documento') }}</small>
+                            <input type="hidden" id="url_bucarPaciente" value="{{ route('programacion.buscarPaciente') }}">
+                            <input type="text" id="numero_documento" class="form-control">
+                            <small id="err-numero_documento" class="text-danger"></small>
                         </div>
-                        <input type="submit" value="Buscar" class="btn btn-primary">
+                        <a id="buscarPaciente" class="btn btn-primary">Buscar</a>
                     </form>
                 </div>
             </div>
             <div class="col-sm-6">
-                @isset($infoPaciente)
-                    @foreach ($infoPaciente as $paciente)
-                        <div class="card card-cascade">
-                            <div class="view view-cascade gradient-card-header blue-gradient">
-                                <h2 class="card-header-title mb-3 mt-2 text-center text-white">
-                                    {{ $paciente->primer_nombre .' '. $paciente->primer_apellido .' '. $paciente->segundo_apellido }}
-                                </h2>
-                            </div>
-                            <div class="card-body card-body-cascade text-left">
-                                <p><strong>Documento de identidad:</strong>  {{ $paciente->tipo_documento .' - '. $paciente->numero_documento}}</p>
-                                <p><strong>Edad:</strong>  {{ $paciente->edad .' '. $paciente->unidad_medida}}</p>
-                                <p><strong>Tipo de paciente:</strong>  {{ $paciente->tipo_paciente }}</p>
-                                <p><strong>aseguradora:</strong>  {{ $paciente->aseguradora }}</p>
-                                <p><strong>Fecha de registro:</strong>  {{ $paciente->fecha_registro }}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                @endisset
+                <div hidden id="card-paciente" class="card card-cascade">
+                    <div class="view view-cascade gradient-card-header blue-gradient">
+                        <h2 id="nombrePacienteTitulo" class="card-header-title mb-3 mt-2 text-center text-white"></h2>
+                    </div>
+                    <div class="card-body card-body-cascade text-left">
+                        <p id="nombrePaciente"></p>
+                        <p id="documentoPaciente"></p>
+                        <p id="edadPaciente"></p>
+                        <p id="tipoPaciente"></p>
+                        <p id="aseguradora"></p>
+                        <p id="fecha_creacion_registro"></p>
+                    </div>
+                </div>
 
                 @if (session('Msj') == '!found')
                     <div class="alert alert-danger" role="alert">
@@ -82,69 +77,72 @@
             </div>
         </div>
 
-        @isset($infoPaciente)
-            <div class="card mt-3 mr-3">
-                <div class="card-body">
-                    <form action="{{ route('programacion.guardar') }}" method="post">
-                        @csrf
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Acepta Visita</label>
-                                    <input type="hidden" name="paciente_id" value="{{ $paciente->id }}">
-                                    <select name="acepta_visita" class="custom-select">
-                                        <option selected value=""> </option>
-                                        <option value="SI">Si</option>
-                                        <option value="NO">No</option>
-                                        <option value="LLAMADA NO EXITOSA">Llamada no Exitosa</option>
-                                        <option value="NO APLICA">No Aplica</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Fecha de Programacion</label>
-                                    <input type="date" name="fecha_programacion" class="form-control">
-                                </div>
+        <div class="card mt-3 mr-3">
+            <div hidden id="div-formulario-programacion" class="card-body">
+                <form id="formulario-programacion">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Acepta Visita</label>
+                                <input type="hidden" id="paciente_id">
+                                <input type="hidden" id="url_guardar-fecha_prgramacion" value="{{route('programacion.guardar')}}">
+                                <select id="acepta_visita" class="custom-select">
+                                    <option selected value="">Seleccione una opcion</option>
+                                    <option value="SI">Si</option>
+                                    <option value="NO">No</option>
+                                    <option value="LLAMADA NO EXITOSA">Llamada no Exitosa</option>
+                                    <option value="NO APLICA">No Aplica</option>
+                                </select>
+                                <small id="err-acepta_visita" class="text-danger"></small>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Sitio de Toma de Muestra</label>
-                                    <select name="programacion_atencion" class="custom-select">
-                                        <option selected value=""> </option>
-                                        <option value="CERCO">Cerco</option>
-                                        <option value="DOMICILIO">Domicilio</option>
-                                        <option value="CARCEL">Carcel</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Programa al que Pertenece</label>
-                                    <select name="nombre_programa" class="custom-select">
-                                        <option selected value=""> </option>
-                                        <option value="NO APLICA">No Aplica</option>
-                                        <option value="NINGUNO">Ninguno</option>
-                                        <option value="DE TODO CORAZON">De todo Corazón</option>
-                                        <option value="VIH">Vih</option>
-                                        <option value="AMARTE (ARTRITIS REUMATOIDES)">Amarte (artritis reumatoides)</option>
-                                        <option value="RESPIRA (EPOC)">Respira (Epoc)</option>
-                                        <option value="PROMOCION Y MANTENIMIENTO DE LA SALUD">Promocion y mantenimiento de la salud</option>
-                                        <option value="MUJER SANA">Mujer Sana</option>
-                                        <option value="OBESIDAD">Obesidad</option>
-                                        <option value="GESTANTES">Gestantes</option>
-                                    </select>
-                                </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Fecha de Programacion</label>
+                                <input type="date" id="fecha_programacion" min="{{ date('Y-m-d') }}" class="form-control">
+                                <small id="err-fecha_programacion" class="text-danger"></small>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-left">
-                            <input type="submit" value="Guardar Datos" class="btn btn-primary ml-0">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Sitio de Toma de Muestra</label>
+                                <select id="lugar_toma" class="custom-select">
+                                    <option selected value="">Seleccione una opcion</option>
+                                    <option value="CERCO">Cerco</option>
+                                    <option value="DOMICILIO">Domicilio</option>
+                                    <option value="CARCEL">Carcel</option>
+                                </select>
+                                <small id="err-lugar_toma" class="text-danger"></small>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Programa al que Pertenece</label>
+                                <select id="nombre_programa" class="custom-select">
+                                    <option selected value="">Seleccione una opcion</option>
+                                    <option value="NO APLICA">No Aplica</option>
+                                    <option value="NINGUNO">Ninguno</option>
+                                    <option value="DE TODO CORAZON">De todo Corazón</option>
+                                    <option value="VIH">Vih</option>
+                                    <option value="AMARTE (ARTRITIS REUMATOIDES)">Amarte (artritis reumatoides)</option>
+                                    <option value="RESPIRA (EPOC)">Respira (Epoc)</option>
+                                    <option value="PROMOCION Y MANTENIMIENTO DE LA SALUD">Promocion y mantenimiento de la salud</option>
+                                    <option value="MUJER SANA">Mujer Sana</option>
+                                    <option value="OBESIDAD">Obesidad</option>
+                                    <option value="GESTANTES">Gestantes</option>
+                                </select>
+                            <small id="err-nombre_programa" class="text-danger"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-left">
+                        <a id="guardar-fecha_programacion" class="btn btn-primary ml-0">Guardar Datos</a>
+                    </div>
+                </form>
             </div>
-        @endisset
+        </div>
+
     </div>
 @endsection

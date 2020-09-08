@@ -150,7 +150,7 @@
 
             <div class="col-sm-3">
                 <label class="col-form-label">Fecha De Recepcion de Informacion</label>
-                <input type="date" name="fecha_prog_recep" class="form-control" value="{{ old('fecha_prog_recep') }}">
+                <input type="date" name="fecha_prog_recep" class="form-control" max="{{ date('Y-m-d') }}"value="{{ old('fecha_prog_recep') }}">
                 <small class="text-danger">{{ $errors->paciente->first('fecha_prog_recep')}}</small>
             </div>
 
@@ -165,15 +165,15 @@
                 <small class="text-danger">{{ $errors->paciente->first('municipio')}}</small>
             </div>
         </div>
-    </form>
-    <div class="row mt-3">
-        <div class="col-sm-3">
-            <input type="submit" class="btn btn-outline-secondary btn-lg" value="Guardar Datos">
+        <div class="row mt-3">
+            <div class="col-sm-3">
+                <input type="submit" class="btn btn-outline-secondary btn-lg" value="Guardar Datos">
+            </div>
+            
+            {{-- <div class="col-sm-3">
+                <a href="index.php" class="btn btn-outline-secondary btn-lg">regresar</a> 
+            </div> --}}
         </div>
-        
-        {{-- <div class="col-sm-3">
-            <a href="index.php" class="btn btn-outline-secondary btn-lg">regresar</a> 
-        </div> --}}
-    </div>
+    </form>
 </div>
 @endsection

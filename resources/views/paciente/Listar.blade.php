@@ -22,7 +22,7 @@
                                 <td class="text-center">{{ $paciente->edad .' '. $paciente->unidad_medida }}</td>
                                 <td class="text-center">{{ $paciente->tipo_documento .' - '. $paciente->numero_documento }}</td>
                                 <td class="text-center">{{ $paciente->telefono }}</td>
-                                <td class="text-center">{{ $paciente->fecha_registro }}</td>
+                                <td class="text-center">{{ $paciente->fecha_creacion_registro }}</td>
                             </tr>
                             
                         @endforeach
